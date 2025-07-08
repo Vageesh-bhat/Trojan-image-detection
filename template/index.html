@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trojan Image Detector</title>
+</head>
+<body>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
+            });
+        });
+    </script>
+</body>
+</html>
