@@ -1,31 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trojan Image Detector</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <form id="upload-form" enctype="multipart/form-data">
-        <label for="file">Upload Image</label>
-        <input type="file" id="file" name="file" accept="image/*">
-        <button type="submit">Upload</button>
-    </form>
-    <div id="result"></div>
+    <div class="container">
+        <h1>Trojan Image Detector</h1>
+        <form id="upload-form" action="/predict" method="post" enctype="multipart/form-data">
+            <div class="drop-area" id="drop-area">
+                <p>Drag & Drop an image here or click to select</p>
+                <input type="file" name="file" id="file-input" accept="image/*" required hidden>
+                <img id="preview" src="#" alt="Preview" style="display: none;">
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
 
     <script>
-        document.getElementById('upload-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-            fetch('/predict', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
-            });
+        const dropArea = document.getElementById("drop-area");
+        const fileInput = document.getElementById("file-input");
+        const preview = document.getElementById("preview");
+
+        dropArea.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            previewFile(file);
         });
+
+        dropArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropArea.classList.add("dragover");
+        });
+
+        dropArea.addEventListener("dragleave", () => {
+            dropArea.classList.remove("dragover");
+        });
+
+        dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropArea.classList.remove("dragover");
+            const file = e.dataTransfer.files[0];
+            fileInput.files = e.dataTransfer.files;
+            previewFile(file);
+        });
+
+        function previewFile(file) {
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </body>
 </html>
