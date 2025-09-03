@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Prediction</title>
+    <!-- Include Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
+    <main class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl text-center w-full max-w-lg transition-transform duration-300 transform hover:scale-105">
+        <h1 class="text-4xl font-extrabold text-slate-800 mb-6 tracking-tight">Image Prediction</h1>
+        <p class="text-lg font-medium text-slate-600 mb-8">Upload an image to predict if it is a Trojan image or not.</p>
+
+        <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+            <label for="file-upload" class="cursor-pointer">
+                <div class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-400 p-8 rounded-xl bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
+                    <svg class="w-16 h-16 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4v0a4 4 0 014-4h4.586a1 1 0 01.707.293l2.828 2.828a1 1 0 001.414 0l2.828-2.828a1 1 0 01.707-.293H17a4 4 0 014 4v0a4 4 0 01-4 4h-2m-8-2v4m0 0l-2-2m2 2l2-2"></path>
+                    </svg>
+                    <p class="mt-4 text-sm text-indigo-700 font-semibold">
+                        <span class="hover:underline">Click to upload</span> or drag and drop
+                    </p>
+                    <input id="file-upload" name="file" type="file" class="sr-only">
+                </div>
+            </label>
+            <button type="submit" class="w-full px-8 py-4 bg-indigo-500 text-white font-bold rounded-full shadow-lg hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300">
+                Predict
+            </button>
+        </form>
+    </main>
+</body>
+</html>

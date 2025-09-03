@@ -1,0 +1,4 @@
+all_malware
+static/uploads
+venv
+__pycache__/
